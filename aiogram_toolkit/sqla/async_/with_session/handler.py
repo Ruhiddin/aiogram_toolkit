@@ -1,38 +1,42 @@
 from functools import wraps
-from sqlalchemy.ext.asyncio import AsyncSession
-from typing import Callable
-from typing import Literal
+from typing import Callable, Literal
 
 
-
-def with_session(session_factory: Callable[[], AsyncSession], finally_do: Literal['close', 'expunge']='expunge'):
+def with_session(
+    session_factory: Callable[[], "AsyncSession"], # type: ignore  # noqa: F821
+    finally_do: Literal["close", "expunge"] = "expunge"
+):
     """
     Decorator to manage SQLAlchemy session lifecycle in an Aiogram handler.
 
     Args:
-        session_factory (callable): A callable that returns a new SQLAlchemy session.
-
-    Returns:
-        callable: The decorated handler with a managed session.
+        session_factory (callable): A callable returning a new SQLAlchemy AsyncSession.
+        finally_do (str): 'close' or 'expunge' — defines final session handling.
     """
     def decorator(handler):
         @wraps(handler)
         async def wrapped_handler(event, *args, **kwargs):
+            # Lazy import to avoid loading SQLAlchemy globally
+            from sqlalchemy.ext.asyncio import AsyncSession
+
             async with session_factory() as session:
                 try:
-                    # Pass session explicitly to the handler
-                    if kwargs.get('session'):
+                    if "session" in kwargs:
                         return await handler(event, *args, **kwargs)
                     return await handler(event, session=session, *args, **kwargs)
                 except Exception:
                     await session.rollback()
                     raise
                 finally:
-                    if finally_do == 'expunge':
-                        # Do not close or commit the session here; it will be done at the final step
-                        session.expunge_all()  # Expunge all objects to avoid keeping unnecessary references
+                    if finally_do == "expunge":
+                        session.expunge_all()
                     else:
-                        session.close()
+                        # AsyncSession.close() is a coroutine
+                        close_method = getattr(session, "close", None)
+                        if close_method and callable(close_method):
+                            maybe_coro = close_method()
+                            if maybe_coro is not None:
+                                await maybe_coro
 
         return wrapped_handler
     return decorator
