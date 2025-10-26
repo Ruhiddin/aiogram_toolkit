@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=69.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aiogram_toolkit"
+version = "0.1.0"
+description = "A compact utility library extending Aiogram with ready-to-use helpers for everyday bot development. It includes safe callback data unpacking, deep link generation, long message handling, markdown formatting, pagination, and async SQLAlchemy session helpers. Designed for clean, modular, and production-grade Telegram bot architecture."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [
+  { name="Ruhiddin Turdaliyev", email="niddihur@email.com" }
+]
+keywords = ["aiogram", "sqlalchemy", "admin", "async", "bot", "database"]
+dependencies = [
+  "aiogram>=3.0",
+  "SQLAlchemy>=2.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/Ruhiddin/aiogram_toolkit"
+Repository = "https://github.com/Ruhiddin/aiogram_toolkit"
+Issues = "https://github.com/Ruhiddin/aiogram_toolkit/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["aiogram_toolkit*"]
