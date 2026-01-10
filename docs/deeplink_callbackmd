@@ -1,3 +1,5 @@
+[← Back to Main Documentation](../README.md)
+
 # Typed Deeplinks & Callback Dispatcher
 
 This module provides a **stateless, typed dispatcher** that unifies:
