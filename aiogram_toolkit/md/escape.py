@@ -1,7 +1,7 @@
 
 
 # ==============______ MARKDOWN______===========================================================================================  MARKDOWN
-async def normalize_markdown(text):
+async def escape_md(text):
     """
     Escape all standard Markdown-specific characters so they are treated as regular text.
     
@@ -18,7 +18,7 @@ async def normalize_markdown(text):
 
 
 # ==============______MARKDOWN V2______=========================================================================================== MARKDOWN V2
-def normalize_markdown_v2(text):
+def escape_md_v2(text):
     """
     Escape all Markdown V2-specific characters so they are treated as regular text.
     
@@ -36,7 +36,7 @@ def normalize_markdown_v2(text):
 
 
 # ==============______ HTML______===========================================================================================  HTML
-async def normalize_html(text):
+async def escape_html(text):
     """
     Escape special HTML characters so they are treated as regular text.
     
