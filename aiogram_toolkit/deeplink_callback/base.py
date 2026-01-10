@@ -1,7 +1,8 @@
 from aiogram.filters.callback_data import CallbackData
 from .config import callback_config
 
-class BaseCB(CallbackData):
+
+class BaseCB(CallbackData, prefix="base_cb"):
     """
     Base class for all typed callback payloads.
 
