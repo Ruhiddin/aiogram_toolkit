@@ -8,7 +8,7 @@ A compact utility library extending **Aiogram** with ready-to-use helpers for ev
 - [FSM Utilities](docs/fsm_utils.md) _(currently no docs available)_
 - [Middleware Factory](docs/middleware.md) _(currently no docs available)_
 - [Deeplink Callback Dispatcher](docs/deeplink_callback.md)
-- [Long Message Handler](docs/long_msg.md) _(currently no docs available)_
+- [Long Message Handler](docs/long_msg.md)
 - [Markdown Formatter](docs/markdown.md) _(currently no docs available)_
 - [Pagination](docs/pagination.md) _(currently no docs available)_
 - [Async SQLAlchemy Session Helpers](docs/sqlalchemy.md) _(currently no docs available)_

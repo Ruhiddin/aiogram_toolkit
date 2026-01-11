@@ -1,4 +1,6 @@
-[← Back to Main Documentation](../README.md)
+# [← Back to Main Documentation](../README.md)
+
+---
 
 # Typed Deeplinks & Callback Dispatcher
 
@@ -265,4 +267,6 @@ This module turns callbacks and deeplinks into:
 
 > **typed, stateless commands**
 
-If you build serious Telegram bots, this becomes infrastructure — not a hack.
+## If you build serious Telegram bots, this becomes infrastructure — not a hack.
+
+# [← Back to Main Documentation](../README.md)
