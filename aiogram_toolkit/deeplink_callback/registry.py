@@ -1,6 +1,12 @@
 from typing import Callable, Awaitable, Dict, Set, Type, Iterable
 from aiogram.filters.callback_data import CallbackData
 from .trigger import TriggerSpec
+from aiogram.fsm.state import State
+
+
+
+def _state_to_str(s: State | str) -> str:
+    return s.state if isinstance(s, State) else s
 
 Trigger = Callable[..., Awaitable[bool]]
 
@@ -16,8 +22,6 @@ class CallbackRegistry:
         self.cb_classes: Set[Type[CallbackData]] = set()
         self.handlers: Dict[TriggerSpec, Trigger] = {}
 
-    from aiogram.fsm.state import State
-
     def register(
         self,
         cb_cls: Type[CallbackData],
@@ -31,10 +35,11 @@ class CallbackRegistry:
         actions = action if isinstance(action, (list, tuple, set)) else (action,)
 
         state_set = (
-            frozenset(str(s) for s in states)
+            frozenset(_state_to_str(s) for s in states)
             if states is not None
             else None
         )
+
 
         for act in actions:
             spec = TriggerSpec(cb_cls, act, state_set)
@@ -45,24 +50,24 @@ class CallbackRegistry:
             self.handlers[spec] = trigger
 
 
-    def resolve(
-        self,
-        cb: CallbackData,
-        current_state: str | None,
-    ) -> Trigger | None:
-
+    def resolve(self, cb: CallbackData, current_state: str | None) -> Trigger | None:
+        # 1. exact state match
         for spec, trigger in self.handlers.items():
-            if spec.cb_cls is not type(cb):
-                continue
-            if spec.action != cb.action:
-                continue
-
-            # no state restriction
-            if spec.states is None:
+            if (
+                spec.cb_cls is type(cb)
+                and spec.action == cb.action
+                and spec.states
+                and current_state in spec.states
+            ):
                 return trigger
 
-            # state required
-            if current_state in spec.states:
+        # 2. fallback (no state)
+        for spec, trigger in self.handlers.items():
+            if (
+                spec.cb_cls is type(cb)
+                and spec.action == cb.action
+                and spec.states is None
+            ):
                 return trigger
 
         return None
