@@ -1,8 +1,10 @@
+from aiogram.fsm.context import FSMContext
 from aiogram import BaseMiddleware
 from aiogram.types import Message, CallbackQuery, TelegramObject
 from typing import Callable, Awaitable, Any
 
 from .registry import CallbackRegistry
+
 
 
 class DeeplinkDispatcherMiddleware(BaseMiddleware):
@@ -53,8 +55,13 @@ class DeeplinkDispatcherMiddleware(BaseMiddleware):
             return await handler(event, data)
 
         # ---- resolve trigger ---------------------------------------------
+        state: str | None = None
+        fsm: FSMContext | None = data.get("state")
 
-        trigger = self.registry.resolve(cb)
+        if fsm:
+            state = await fsm.get_state()
+
+        trigger = self.registry.resolve(cb, state)
         if not trigger:
             return await handler(event, data)
 
