@@ -2,13 +2,12 @@ from typing import Callable, Awaitable, Dict, Set, Type, Iterable
 from aiogram.filters.callback_data import CallbackData
 from .trigger import TriggerSpec
 from aiogram.fsm.state import State
+from .trigger import Trigger
 
 
 
 def _state_to_str(s: State | str) -> str:
     return s.state if isinstance(s, State) else s
-
-Trigger = Callable[..., Awaitable[bool]]
 
 
 class CallbackRegistry:
