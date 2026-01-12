@@ -4,7 +4,7 @@ from aiogram.types import Message, CallbackQuery, TelegramObject
 from typing import Callable, Awaitable, Any
 
 from .registry import CallbackRegistry
-from logger import logger
+from ..logger import logger
 
 
 class DeeplinkDispatcherMiddleware(BaseMiddleware):
