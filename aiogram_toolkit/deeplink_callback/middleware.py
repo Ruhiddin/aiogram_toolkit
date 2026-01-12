@@ -4,7 +4,7 @@ from aiogram.types import Message, CallbackQuery, TelegramObject
 from typing import Callable, Awaitable, Any
 
 from .registry import CallbackRegistry
-
+from logger import logger
 
 
 class DeeplinkDispatcherMiddleware(BaseMiddleware):
@@ -68,9 +68,10 @@ class DeeplinkDispatcherMiddleware(BaseMiddleware):
         # ---- call trigger ------------------------------------------------
 
         try:
-            success = await trigger(event, cb)
-        except Exception:
+            success = await trigger(event, cb, data)
+        except Exception as e:
             # toolkit should log, not crash
+            logger.exception("Exception in trigger:\n%s", e)
             return None
 
         # ---- cleanup -----------------------------------------------------
